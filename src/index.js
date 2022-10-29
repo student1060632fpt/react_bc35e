@@ -8,6 +8,10 @@ import HandleEvent from './HandleEvent/HandleEvent';
 import DemoState from './State/DemoState';
 //nhúng css
 import './assets/css/style.css';
+import RenderList from './RenderList/RenderList';
+import ExRenderFilms from './RenderList/ExRenderFilms';
+import DemoProps from './Props/DemoProps/DemoProps';
+import ShoesApp from './Props/ShoesApp/ShoesApp';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -17,7 +21,10 @@ root.render(
       {/* <BaiTapHomeLayout /> */}
       {/* <DataBinding /> */}
       {/* <HandleEvent /> */}
-      <DemoState />
-      <p className='color-red'>abc</p>
+      {/* <DemoState /> */}
+      {/* <RenderList /> */}
+      {/* <ExRenderFilms /> */}
+      {/* <DemoProps /> */}
+      <ShoesApp />
   </div>
 )
