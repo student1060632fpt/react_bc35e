@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ProductItem from './ProductItem'
 
 const data = [
     {
@@ -131,7 +132,11 @@ export default class ShoesApp extends Component {
       <div className='container'>
         <h3 className='text-center'>Shoes app</h3>
         <div className='row'>
-
+          {data.map((item,index)=>{
+            return <div className='col-3 mt-2' key={index}>
+              <ProductItem item={item} />
+            </div>
+          })}
         </div>
       </div>
     )
