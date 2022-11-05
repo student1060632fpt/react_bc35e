@@ -21,6 +21,7 @@ import Home from './pages/Home/Home';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import HomeTemplate from './templates/HomeTemplate';
+import BaiTapGioHang from './pages/BaiTapGioHang/BaiTapGioHang';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -40,6 +41,8 @@ root.render(
         <Route path='register' element={<Register />} />
         {/* localhost:3000/excarstore */}
         <Route path='excarstore' element={<ExerciseCarStore />} />
+        
+        <Route path='btgiohang' element={<BaiTapGioHang />} />
       </Route>
     </Routes>
   </BrowserRouter>
