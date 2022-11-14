@@ -50,7 +50,11 @@ export default class ProductFilter extends Component {
         </div>
 
         <div className="mb-3">
-          <select className="form-control">
+          <select
+            className="form-control"
+            onChange={(evt) => this.props.onChangeCategory(evt.target.value)}
+          >
+            <option value="">Select Category</option>
             {this.state.categories.map((category) => {
               return <option value={category}>{category}</option>;
             })}
