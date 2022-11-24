@@ -56,7 +56,6 @@ export default class Store extends Component {
     return (
       <div className="container">
         <h1 className="text-center text-primary">Cybersoft Store</h1>
-
         <div className="row">
           <div className="col-3">
             <ProductFilter
@@ -64,7 +63,6 @@ export default class Store extends Component {
               onChangeCategory={this.handleChangeCategory}
             />
           </div>
-
           <div className="col-9">
             <ProductList products={this.state.products} />
           </div>

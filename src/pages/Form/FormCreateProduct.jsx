@@ -18,17 +18,15 @@ export default class FormCreateProduct extends Component {
             image: '',
             description: '',
         },
-        valid: false
-
-
+        valid:false
     }
 
+
     checkValid = () => {
-        //form hợp lệ khi values !== '' và error = ''
-        //Lấy ra object value và error để duyệt điều kiện hợp lệ
-        let { values, errors } = this.state;
-        for (let key in errors) {
-            if (errors[key] !== '' || values[key] == '') {
+        let {values,errors} = this.state;
+        //form không hợp lệ khi chỉ cần 1 errors khác rỗng và value = ''
+        for(let key in errors){
+            if(errors[key] !== '' || values[key] === '') {
                 return false;
             }
         }
@@ -36,53 +34,49 @@ export default class FormCreateProduct extends Component {
     }
 
     handleInputChange = (e) => {
-        //Lấy ra id và value của thẻ đang oninput
-        //properties: value,id,style,innerhtml ... 
-        let { value, id, regex } = e.target; //id: id, name,price ,... tuỳ theo trường đang oninput là gì
-
-        //attribute: là thuộc tính tự mình thêm vào thẻ
-        let dataAttrRegex = e.target.getAttribute('data-regex');
-        let type = e.target.getAttribute('data-type');
-        console.log('dataRegex', dataAttrRegex);
-        //Xử lý value
+        //Lấy ra giá trị của id và value trên thẻ
+        const {value,id} = e.target; //id ='price' value='1000'
+        //Trên 1 tag sẽ có 2 phần
+        /*
+            phần thứ 1: Properties là thuộc tính có sẵn của thẻ 
+            phần thứ 2: Attribute là các thuộc tính mở rộng do ta tự thêm trên thẻ
+        */
+        const type = e.target.getAttribute('data-type');
+        // console.log(type)
+        //Lấy ra values và errors để xử lý trên từng phần
         let newValues = this.state.values;
         newValues[id] = value;
-        //Vử lý errors
         let newErrors = this.state.errors;
+        //Kiểm tra rỗng 
         let messError = '';
-        if (value.trim() == '') {
-            messError = id + ' cannot be blank';
-        } else {
-            //Cách 1
-            // if(dataAttrRegex){
-            //     //string: '/^\d+$/'
-            //     //regex: /^\d+$/.test()
-            //     let regex = new RegExp(dataAttrRegex);
-            //     if(!regex.test(value)){
-            //         messError = id + ' is invalid';
-            //     }
-            // }
-            //Cách 2:
-            if (type === 'number') {
+        if(value.trim() === '') {
+            messError = id + ' cannot be blank !';
+        }else {
+            if(type === 'number') {
                 let regexNumber = /^\d+$/;
-                if (!regexNumber.test(value)) {
-                    messError = id + ' is invalid';
+                if(!regexNumber.test(value)){
+                    messError = id + ' is invalid !';
                 }
             }
+            if(type === 'email') {
+                //check email ....
+            }
+
         }
         newErrors[id] = messError;
 
 
-        //Cập nhật state
+        //Cập nhật lại state của errors và values
         this.setState({
-            values: newValues,
-            errors: newErrors
-        }, () => {
+           values:newValues,
+           errors:newErrors
+        },()=> {
+            
+            //Kiểm tra lỗi 
             let valid = this.checkValid();
             this.setState({
-                valid: valid
+                valid:valid
             })
-
         })
 
     }
@@ -90,10 +84,10 @@ export default class FormCreateProduct extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault(); //Chặn sự kiện reload browser
-        console.log('abc');
         if(!this.checkValid()){
-            return;//Dừng hàm không submit
+            return; //return là lệnh dùng hàm
         }
+        console.log('submit')
     }
     render() {
         return (
@@ -107,24 +101,32 @@ export default class FormCreateProduct extends Component {
                                 <div className='form-group'>
                                     <p>id</p>
                                     <input className='form-control' id="id" name="id" onInput={this.handleInputChange} />
-                                    {this.state.errors.id !== '' && <div className='alert alert-danger mt-2'>{this.state.errors.id}</div>}
+                                    {/* {this.state.errors.id ? <div className='alert alert-danger mt-2'>{this.state.errors.id}</div> : ''} */}
+                                    {this.state.errors.id  && <div className='alert alert-danger mt-2'>{this.state.errors.id}</div>}
+
                                 </div>
                                 <div className='form-group'>
                                     <p>name</p>
                                     <input className='form-control' id="name" name="name" onInput={this.handleInputChange} />
-                                    {this.state.errors.name !== '' ? <div className='alert alert-danger'>{this.state.errors.name}</div> : ''}
+                                    {this.state.errors.name  && <div className='alert alert-danger mt-2'>{this.state.errors.name}</div>}
+
+
                                 </div>
                                 <div className='form-group'>
                                     <p>price</p>
-                                    <input data-type="number" data-regex="^\d+$" className='form-control' id="price" name="price" onInput={this.handleInputChange} />
-                                    <div className='text text-danger'>{this.state.errors.price}</div>
+                                    <input data-type="number" className='form-control' id="price" name="price" onInput={this.handleInputChange} />
+                                    {this.state.errors.price  && <div className='alert alert-danger mt-2'>{this.state.errors.price}</div>}
+
+
                                 </div>
                             </div>
                             <div className='col-6'>
                                 <div className='form-group'>
                                     <p>image</p>
                                     <input className='form-control' id="image" name="image" onInput={this.handleInputChange} />
-                                    <div className='text text-danger'>{this.state.errors.image}</div>
+                                    {this.state.errors.image  && <div className='alert alert-danger mt-2'>{this.state.errors.image}</div>}
+
+
                                 </div>
                                 <div className='form-group'>
                                     <p>productType</p>
@@ -137,13 +139,15 @@ export default class FormCreateProduct extends Component {
                                 <div className='form-group'>
                                     <p>description</p>
                                     <input className='form-control' id="description" name="description" onInput={this.handleInputChange} />
-                                    <div className='text text-danger'>{this.state.errors.description}</div>
+                                    {this.state.errors.description  && <div className='alert alert-danger mt-2'>{this.state.errors.description}</div>}
+
+
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div className='card-footer'>
-                        <button type='submit' className='btn btn-success m-2' disabled={!this.state.valid}>Create</button>
+                        <button type='submit' className='btn btn-success m-2' disabled={!this.state.valid} >Create</button>
                     </div>
                 </div>
             </form>
@@ -154,18 +158,14 @@ export default class FormCreateProduct extends Component {
 
 
 
-// function callback (param) {
-
+// checkValid = () => {
+//     //form hợp lệ khi values !== '' và error = ''
+//     //Lấy ra object value và error để duyệt điều kiện hợp lệ
+//     let { values, errors } = this.state;
+//     for (let key in errors) {
+//         if (errors[key] !== '' || values[key] == '') {
+//             return false;
+//         }
+//     }
+//     return true;
 // }
-
-
-// callback('abc'); //truyền
-
-
-// function main(callback) {
-//     callback('xyz');
-// }
-
-// main((param) => {
-//     console.log(param)
-// })
